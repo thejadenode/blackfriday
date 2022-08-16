@@ -46,8 +46,8 @@ body{
     color: #110313;
     margin: 0;
 
-    left: 1790px;
-    top: 900px;
+    left: 180vh;
+    top: 90vh;
 
     position: fixed;
     z-index: 100;
