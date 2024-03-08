@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
+</head>
+
+<style>
+    #placeholder {
+        position: absolute;
+        visibility: visible;
+        aspect-ratio: 16/9;
+        width: 100vw;
+    }
+
+    #iframeContainer {
+        width: fit-content;
+        height: fit-content;
+        display: flexbox;
+        justify-content: start;
+        align-items: start;
+        aspect-ratio: 16/9;
+
+    }
+
+    #my-iframe {
+        transform-origin: top left;
+        aspect-ratio: 16/9;
+    }
+</style>
+
+
+
+<body>
+    <div>Hello world</div>
+    <div class="embed">
+        <div id="placeholder" class="flex flex-row justify-center bg-green-200">
+        </div>
+
+        <div id="iframeContainer" class="bg-green-900">
+            <iframe id="my-iframe" src="index.html" width="1920px" height="1080px" class="bg-yellow-900"></iframe>
+        </div>
+    </div>
+
+    <p>Placeholder height: <span id="iframeContainerHeight"></span></p>
+    <p>Placeholder width: <span id="iframeContainerWidth"></span></p>
+    <p>Iframe Container height: <span id="iframeContainerMainHeight"></span></p>
+    <p>Iframe width: <span id="iframeWidth"></span></p>
+    <p>H Scale calculated: <span id="scaleCalculated"></span></p>
+    <p>VScaleTranslate calculated: <span id="vscaleCalculated"></span></p>
+    <p>H Translate calculated: <span id="translateCalculated"></span></p>
+    <p>V Translate calculated: <span id="vtranslateCalculated"></span></p>
+</body>
+
+<script>
+    function resizeIframe() {
+        // Get height and width of container to copy
+        const containerWidth = document.getElementById('placeholder').offsetWidth;
+        const containerHeight = document.getElementById('placeholder').offsetHeight;
+        document.getElementById('iframeContainerHeight').innerHTML = containerHeight;
+        document.getElementById('iframeContainerWidth').innerHTML = containerWidth;
+
+        // Calculate and apply scale to iframe
+        // This resizes (by scale) the iframe according to the placeholder it's copying
+        var widthRatio = containerWidth / 1920
+        var heightRatio = containerHeight / 1080
+        var scale = Math.min(containerWidth / 1920, containerHeight / 1080);
+        document.getElementById('my-iframe').style.transform = `scale(${scale})`;
+        // document.getElementById('iframeContainer').style.transform = `scale(${scale})`;
+
+        // Calculate translation for centering horizontally
+        // This moves the container of the iframe to the left depending on the size of the iframe
+        const scaledIframeWidth = 1920 * scale;
+        const translateX = (containerWidth - scaledIframeWidth) / 2;
+        document.getElementById('iframeContainer').style.transform = `translateX(-${translateX}%)`;
+        document.getElementById('iframeContainer').style.width = containerWidth + "px";
+
+        // Adjust iframeContainer height dependig on placeholder
+        document.getElementById('iframeContainer').style.height = containerHeight + "px";
+
+        /*
+        Attept to translate my-iframe to the top-most part of iframeContainer based on ratios
+        */
+
+        document.getElementById('iframeContainerHeight').innerHTML = containerHeight;
+        // document.getElementById('my-iframe').style.transform = `scale(${scale}) translateY(${-5.6814 * (containerHeight / 1920) + 2.1569})`
+    }
+
+    window.addEventListener('resize', resizeIframe);
+    resizeIframe(); // Call the function initially to set the scale on page load
+
+</script>
+
+</html>
